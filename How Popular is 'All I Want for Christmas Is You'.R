@@ -188,7 +188,7 @@ mariah.map <- plot_geo(mariah.complete,
 
 mariah.map
 
-#Exorting the plotly map
-saveWidget(widget = mariah.map, file = "christmasvisualisation.html", selfcontained = T)
+#Exorting the plotly map. partial_bundle() to reduce file size
+saveWidget(partial_bundle(mariah.map), file = "christmasvisualisation.html", selfcontained = T)
 
 
