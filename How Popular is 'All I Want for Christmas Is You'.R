@@ -148,7 +148,7 @@ l <- list(line = list(color = "#b19f98", width = 0.5))
 date.layout <- list(font = list(size = 20,
                                 color = "#126c50"))
 
-#Creating the plotly map
+##---Creating the interactive map---##
 mariah.map <- plot_geo(mariah.complete,            
                        frame = ~Date,            
                        locations = ~iso3,         
@@ -190,5 +190,39 @@ mariah.map
 
 #Exorting the plotly map. partial_bundle() to reduce file size
 saveWidget(partial_bundle(mariah.map), file = "christmasvisualisation.html", selfcontained = T)
+
+##---Creating an accompanying animated histogram to track distribution of chart ranks across time---##
+mariah.hist <- plot_ly(mariah.complete,
+                       x = ~breaks,
+                       type = "histogram",
+                       frame = ~Date,
+                       showlegend = F,
+                       texttemplate = "<b>%{y}</b>",     #to add frequency count above bars
+                       textposition = "outside",
+                       marker = list(color = "#b42d1e")) %>% #to specify color of bars
+  
+  layout(paper_bgcolor = "#faf5e7",  #to specify color of paper
+         plot_bgcolor = "#faf5e7",   #to specify color of plot background
+         margin = list(t = 50),      #to add top margins to the plot  
+         font = list(family = "Roboto Condensed",   #controls font family and color
+                     color = "#b42d1e"),
+         title = "<b>Distribution of Spotify Chart Ranks for 'All I Want for Christmas Is You' across 67 regions</b><br><i>Source: <a href = 'https://www.kaggle.com/datasets/dhruvildave/spotify-charts?select=charts.csv'>Spotify Top 200 Charts</a></i>",
+         xaxis = list(title = "",
+                      range = c(-1, 8)),     #removes x-axis title and sets zoom window of the plot
+         yaxis = list(range = c(0, 59))) %>%  
+  
+  animation_slider(font = list(color = "#126c50"),  #controls animation slider visuals
+                   currentvalue = date.layout,   
+                   bgcolor = "#126c50",             
+                   tickcolor = "#126c50") %>%
+  
+  animation_button(font = list(text = "<b>Play</b>", #controls animation button visuals
+                               size = 14,
+                               color = "#126c50"))
+
+mariah.hist
+
+#Exporting histogram
+saveWidget(partial_bundle(mariah.hist), "hist.html")
 
 
